@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "lx/srv/basic/proto";
+
+// 商品服务
+service ProductService {
+    // 创建商品
+    rpc CreateProduct (CreateProductRequest) returns (Product);
+    // 更新商品
+    rpc UpdateProduct (UpdateProductRequest) returns (Product);
+    // 删除商品
+    rpc DeleteProduct (DeleteProductRequest) returns (DeleteProductResponse);
+    // 获取商品详情
+    rpc GetProduct (GetProductRequest) returns (Product);
+    // 商品列表
+    rpc ListProduct (ListProductRequest) returns (ListProductResponse);
+
+    //创建订单、订单明细
+    rpc OrderItem(OrderItemAddRequest) returns(OrderItemAddResponse);
+
+    // 更新订单状态
+    rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns(UpdateOrderStatusResponse);
+
+}
+
+// 商品
+message Product {
+    int64 id = 1;
+    int64 category_id = 2;
+    int64 brand_id = 3;
+    string name = 4;
+    string images = 5;
+    string description = 6;
+    double price = 7;
+    int32 stock = 8;
+    int32 status = 9;
+    int64 created_at = 10;
+    int64 updated_at = 11;
+}
+
+// 创建商品请求
+message CreateProductRequest {
+    int64 category_id = 1;
+    int64 brand_id = 2;
+    string name = 3;
+    string images = 4;
+    string description = 5;
+    double price = 6;
+    int32 stock = 7;
+    int32 status = 8;
+}
+
+// 更新商品请求
+message UpdateProductRequest {
+    int64 id = 1;
+    int64 category_id = 2;
+    int64 brand_id = 3;
+    string name = 4;
+    string images = 5;
+    string description = 6;
+    double price = 7;
+    int32 stock = 8;
+    int32 status = 9;
+}
+
+// 删除商品请求
+message DeleteProductRequest {
+    int64 id = 1;
+}
+
+// 删除商品响应
+message DeleteProductResponse {
+    bool success = 1;
+}
+
+// 获取商品请求
+message GetProductRequest {
+    int64 id = 1;
+}
+
+// 商品列表请求
+message ListProductRequest {
+    int64 category_id = 1;
+    int64 brand_id = 2;
+    string keyword = 3;
+    int32 status = 4;
+    int32 page = 5;
+    int32 page_size = 6;
+}
+
+// 商品列表响应
+message ListProductResponse {
+    repeated Product products = 1;
+    int32 total = 2;
+}
+
+message OrderItemAddRequest {
+    int64 userId = 1;
+    int64 payType = 2;
+    int64 addressId = 3;
+    repeated OrderItem list = 4;
+}
+
+message OrderItemAddResponse {
+    string orderSn = 1;
+    string payUrl = 2;
+    float total = 3;
+}
+
+message OrderItem {
+    int64 productId = 1;
+    int64 quantity = 2;
+}
+
+// 更新订单状态请求
+message UpdateOrderStatusRequest {
+    string orderSn = 1;
+    int64 status = 2;
+}
+
+// 更新订单状态响应
+message UpdateOrderStatusResponse {
+    bool success = 1;
+}
